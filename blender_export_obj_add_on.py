@@ -1,3 +1,15 @@
+bl_info = {
+    "name" : "Export Object as FBX",
+    "author" : "Mill",
+    "version" : (1, 0),
+    "blender" : (3, 20, 0),
+    "location" : "View3d > Tool",
+    "warning" : "",
+    "wiki_url" : "",
+    "category" : "Export Object as FBX",
+}
+
+
 import bpy
 
 class ExportProperties(bpy.types.PropertyGroup):

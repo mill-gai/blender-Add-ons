@@ -1,3 +1,15 @@
+bl_info = {
+    "name" : "Generate Colorful Cubes",
+    "author" : "Mill",
+    "version" : (1, 0),
+    "blender" : (3, 20, 0),
+    "location" : "View3d > Tool",
+    "warning" : "",
+    "wiki_url" : "",
+    "category" : "Generate Colorful Cubes",
+}
+
+
 import bpy
 from random import randint, uniform
 from math import radians    
