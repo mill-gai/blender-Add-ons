@@ -1,7 +1,8 @@
 import bpy
 
 class ExportProperties(bpy.types.PropertyGroup):
-    filePath: bpy.props.StringProperty(default="Unknown")
+    filePath: bpy.props.StringProperty(default="")
+    fileName: bpy.props.StringProperty(default="untitled")
     checkExisting: bpy.props.BoolProperty(default=True)
     selectObjOnly: bpy.props.BoolProperty(default=True)
     axisForward: bpy.props.EnumProperty(default="Y", items=[('X', "X", ""),
@@ -18,7 +19,6 @@ class ExportProperties(bpy.types.PropertyGroup):
                                                ('-Z', "-Z", "")])
                                                
 
-
 class EXPORTOBJ_PT_main_panel(bpy.types.Panel):
     bl_label = "Export Objects Panel"
     bl_idname = "EXPORTOBJ_PT_main_panel"
@@ -30,7 +30,9 @@ class EXPORTOBJ_PT_main_panel(bpy.types.Panel):
         layout = self.layout
         row = layout.row()
         row.operator("exportobj.togglefaceorien_operator")
+        
         row = layout.row()
+        
         export_property = context.scene.export_property
         layout.prop(export_property, "filePath")
         layout.prop(export_property, "checkExisting")
@@ -38,24 +40,40 @@ class EXPORTOBJ_PT_main_panel(bpy.types.Panel):
         layout.prop(export_property, "axisForward")
         layout.prop(export_property, "axisUp")
         
+        row = layout.row()
+        
+        row.operator("exportobj.exportasfbx_operator")
+        
         
 class EXPORTOBJ_OT_toggle_face_orien(bpy.types.Operator):
     bl_label = "Toggle Face Orientation"
     bl_idname = "exportobj.togglefaceorien_operator"
   
     def execute(self, context):
-        layout = self.layout
-        
         # toggle show face orientation
         prevVal = bpy.context.space_data.overlay.show_face_orientation
         bpy.context.space_data.overlay.show_face_orientation = not prevVal
         
         return {'FINISHED'}
 
-#class EXPORTOBJ_OT_export_as_fbx():
+class EXPORTOBJ_OT_export_as_fbx(bpy.types.Operator):
+    bl_label = "Export As FBX"
+    bl_idname = "exportobj.exportasfbx_operator"
+    
+    def execute(self, context):
+        export_property = context.scene.export_property
+#        filePath = export_property.filePath + export_property.fileName + ".fbx"
+        bpy.ops.export_scene.fbx(filepath=export_property.filePath,
+                                 check_existing=export_property.checkExisting,
+                                 use_selection=export_property.selectObjOnly,
+                                 axis_forward=export_property.axisForward,
+                                 axis_up=export_property.axisUp,
+                                 path_mode='AUTO'
+                                 )
+        return {'FINISHED'}
     
         
-classes = [EXPORTOBJ_PT_main_panel, EXPORTOBJ_OT_toggle_face_orien, ExportProperties]
+classes = [EXPORTOBJ_PT_main_panel, EXPORTOBJ_OT_toggle_face_orien, ExportProperties, EXPORTOBJ_OT_export_as_fbx]
         
 def register():
 #    bpy.utils.register_class(EXPORTOBJ_PT_main_panel)
