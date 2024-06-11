@@ -1,8 +1,8 @@
 import bpy
 
 class ExportProperties(bpy.types.PropertyGroup):
-    filePath: bpy.props.StringProperty(default="")
-    fileName: bpy.props.StringProperty(default="untitled")
+    filePath: bpy.props.StringProperty(default="",
+                                       description="path for saving fbx file ex. C:\\Users\\username\\filename.fbx")
     checkExisting: bpy.props.BoolProperty(default=True)
     selectObjOnly: bpy.props.BoolProperty(default=True)
     axisForward: bpy.props.EnumProperty(default="Y", items=[('X', "X", ""),
@@ -59,17 +59,26 @@ class EXPORTOBJ_OT_toggle_face_orien(bpy.types.Operator):
 class EXPORTOBJ_OT_export_as_fbx(bpy.types.Operator):
     bl_label = "Export As FBX"
     bl_idname = "exportobj.exportasfbx_operator"
-    
+  
     def execute(self, context):
         export_property = context.scene.export_property
-#        filePath = export_property.filePath + export_property.fileName + ".fbx"
-        bpy.ops.export_scene.fbx(filepath=export_property.filePath,
-                                 check_existing=export_property.checkExisting,
-                                 use_selection=export_property.selectObjOnly,
-                                 axis_forward=export_property.axisForward,
-                                 axis_up=export_property.axisUp,
-                                 path_mode='AUTO'
-                                 )
+        if export_property.filePath == "":
+            self.report({'ERROR'}, "Invalid File Path")
+        elif export_property.filePath[-4:] != ".fbx":
+            self.report({'ERROR'}, "Invalid File Extension")
+        else:
+            try:
+                bpy.ops.export_scene.fbx(filepath=export_property.filePath,
+                                     check_existing=export_property.checkExisting,
+                                     use_selection=export_property.selectObjOnly,
+                                     axis_forward=export_property.axisForward,
+                                     axis_up=export_property.axisUp,
+                                     path_mode='AUTO'
+                                     )
+            except:
+                self.report({'ERROR'}, "Export Unsuccessful")
+            else:
+                self.report({'INFO'}, "Export Successful")
         return {'FINISHED'}
     
         
