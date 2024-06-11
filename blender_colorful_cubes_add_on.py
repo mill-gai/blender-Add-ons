@@ -30,9 +30,9 @@ def generateColor(color, hasRandomHue, hasRandomSaturation):
     # connect output of the node to the input base color of Principled BSDF
     link(hueSaturation_node.outputs[0], principled_node.inputs[0])
     if(hasRandomHue):
-        link(objectInfo_node.outputs[5], hueSaturation_node.inputs[0])
+        link(objectInfo_node.outputs[4], hueSaturation_node.inputs[0])
     if(hasRandomSaturation):
-        link(objectInfo_node.outputs[5], hueSaturation_node.inputs[1])
+        link(objectInfo_node.outputs[4], hueSaturation_node.inputs[1])
     
     return new_material
 
