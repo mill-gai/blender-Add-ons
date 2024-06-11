@@ -1,3 +1,15 @@
+bl_info = {
+    "name" : "Generate Colorful Cubes",
+    "author" : "Mill",
+    "version" : (1, 0),
+    "blender" : (3, 20, 0),
+    "location" : "View3d > Tool",
+    "warning" : "",
+    "wiki_url" : "",
+    "category" : "Generate Colorful Cubes",
+}
+
+
 import bpy
 from random import randint, uniform
 from math import radians    
@@ -30,9 +42,9 @@ def generateColor(color, hasRandomHue, hasRandomSaturation):
     # connect output of the node to the input base color of Principled BSDF
     link(hueSaturation_node.outputs[0], principled_node.inputs[0])
     if(hasRandomHue):
-        link(objectInfo_node.outputs[5], hueSaturation_node.inputs[0])
+        link(objectInfo_node.outputs[4], hueSaturation_node.inputs[0])
     if(hasRandomSaturation):
-        link(objectInfo_node.outputs[5], hueSaturation_node.inputs[1])
+        link(objectInfo_node.outputs[4], hueSaturation_node.inputs[1])
     
     return new_material
 
